@@ -26,7 +26,7 @@ export class CustomersController {
     description: 'Customer created',
   })
   @ApiResponse({
-    status: 500,
+    status: 200,
     type: HttpException,
     isArray: true,
     description: 'Error with Database',

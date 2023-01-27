@@ -6,7 +6,9 @@ import { Customer } from '../entities/Customer';
 export declare class CustomersController {
     private readonly customersService;
     constructor(customersService: CustomersService);
-    create(createCustomerDto: CreateCustomerDto): Promise<HttpException | import("./dto/return-customer.dto").ReturnCustomerDto>;
+    create(createCustomerDto: CreateCustomerDto): Promise<{
+        message: string;
+    } | HttpException>;
     findAll(): Promise<HttpException | Customer[]>;
     update(id: string, updateCustomerDto: UpdateCustomerDto): Promise<Customer | HttpException>;
     remove(id: string): Promise<Customer | HttpException>;

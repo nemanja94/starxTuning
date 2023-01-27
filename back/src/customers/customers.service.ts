@@ -15,7 +15,7 @@ export class CustomersService {
 
   async create(
     createCustomerDto: CreateCustomerDto,
-  ): Promise<ReturnCustomerDto | HttpException> {
+  ): Promise<{ message: string } | HttpException> {
     try {
       createCustomerDto.customerName = await this.titleCaseWord(
         createCustomerDto.customerName,
@@ -30,7 +30,7 @@ export class CustomersService {
         customerPhone: createCustomerDto.customerPhone,
       });
 
-      if (user) return new HttpException('User already exist', 200);
+      if (user) throw new HttpException('User already exist', 200);
 
       const result: Customer = await this.cutomerRepo.save(createCustomerDto);
 
@@ -39,9 +39,9 @@ export class CustomersService {
       rdto.customerSurname = result.customerSurname;
       rdto.customerPhone = result.customerPhone;
 
-      return rdto;
+      return { message: 'User created' };
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 
@@ -49,7 +49,7 @@ export class CustomersService {
     try {
       return await this.cutomerRepo.find();
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 
@@ -57,7 +57,7 @@ export class CustomersService {
     try {
       return await this.cutomerRepo.findOne({ where: { customerId } });
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 
@@ -70,7 +70,7 @@ export class CustomersService {
         where: { customerName, customerSurname },
       });
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 
@@ -80,7 +80,7 @@ export class CustomersService {
     try {
       return await this.cutomerRepo.findOne({ where: { customerPhone } });
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 
@@ -88,14 +88,14 @@ export class CustomersService {
     customerId: number,
     updateCustomerDto: UpdateCustomerDto,
   ): Promise<Customer | HttpException> {
-    if (!customerId) return new HttpException('customerId empty', 400);
+    if (!customerId) return new HttpException('customerId empty', 200);
 
     try {
       const customer: Customer = await this.cutomerRepo.findOne({
         where: { customerId },
       });
 
-      if (!customer) return new HttpException('Customer not found', 403);
+      if (!customer) return new HttpException('Customer not found', 200);
 
       customer.customerName = await this.titleCaseWord(
         updateCustomerDto.customerName,
@@ -107,7 +107,7 @@ export class CustomersService {
 
       return await this.cutomerRepo.save(customer);
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 
@@ -117,12 +117,12 @@ export class CustomersService {
         where: { customerId },
       });
 
-      if (!customer) return new HttpException('Customer not found', 403);
+      if (!customer) return new HttpException('Customer not found', 200);
 
       customer.deletedAt = new Date();
       return await this.cutomerRepo.save(customer);
     } catch (error) {
-      return new HttpException(error, 500);
+      return new HttpException(error, 200);
     }
   }
 

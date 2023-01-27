@@ -46,7 +46,7 @@ __decorate([
         description: 'Customer created',
     }),
     (0, swagger_1.ApiResponse)({
-        status: 500,
+        status: 200,
         type: common_1.HttpException,
         isArray: true,
         description: 'Error with Database',

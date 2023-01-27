@@ -22,16 +22,20 @@ const AddUserForm = () => {
         }),
       });
 
-      const resJson = await res.json();
-      await setMesasge(resJson.message);
+      //Ako postoji problem, ima message objekat, ukoliko ne postoji, vec kreira, onda vrati samo podatke ulogovanog usera
+      const resp = await res.json();
+      console.log(resp.message);
+      setMesasge(() => resp.message);
     } catch (error) {
       console.log("error");
-      console.log(error);
+      throw error;
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
+      {/* Proveriti da li je niz ili nije, pa po tome izbaciti resultat */}
+
       <div className={styles.message}>{message}</div>
 
       <div className={styles.formControl}>

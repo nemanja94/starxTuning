@@ -32,16 +32,16 @@ let CustomersService = class CustomersService {
                 customerPhone: createCustomerDto.customerPhone,
             });
             if (user)
-                return new common_1.HttpException('User already exist', 200);
+                throw new common_1.HttpException('User already exist', 200);
             const result = await this.cutomerRepo.save(createCustomerDto);
             const rdto = new return_customer_dto_1.ReturnCustomerDto();
             rdto.customerName = result.customerName;
             rdto.customerSurname = result.customerSurname;
             rdto.customerPhone = result.customerPhone;
-            return rdto;
+            return { message: 'User created' };
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     async findAll() {
@@ -49,7 +49,7 @@ let CustomersService = class CustomersService {
             return await this.cutomerRepo.find();
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     async findOneById(customerId) {
@@ -57,7 +57,7 @@ let CustomersService = class CustomersService {
             return await this.cutomerRepo.findOne({ where: { customerId } });
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     async findByName(customerName, customerSurname) {
@@ -67,7 +67,7 @@ let CustomersService = class CustomersService {
             });
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     async findOneByPhone(customerPhone) {
@@ -75,25 +75,25 @@ let CustomersService = class CustomersService {
             return await this.cutomerRepo.findOne({ where: { customerPhone } });
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     async update(customerId, updateCustomerDto) {
         if (!customerId)
-            return new common_1.HttpException('customerId empty', 400);
+            return new common_1.HttpException('customerId empty', 200);
         try {
             const customer = await this.cutomerRepo.findOne({
                 where: { customerId },
             });
             if (!customer)
-                return new common_1.HttpException('Customer not found', 403);
+                return new common_1.HttpException('Customer not found', 200);
             customer.customerName = await this.titleCaseWord(updateCustomerDto.customerName);
             customer.customerSurname = await this.titleCaseWord(updateCustomerDto.customerSurname);
             customer.customerPhone = updateCustomerDto.customerPhone;
             return await this.cutomerRepo.save(customer);
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     async remove(customerId) {
@@ -102,12 +102,12 @@ let CustomersService = class CustomersService {
                 where: { customerId },
             });
             if (!customer)
-                return new common_1.HttpException('Customer not found', 403);
+                return new common_1.HttpException('Customer not found', 200);
             customer.deletedAt = new Date();
             return await this.cutomerRepo.save(customer);
         }
         catch (error) {
-            return new common_1.HttpException(error, 500);
+            return new common_1.HttpException(error, 200);
         }
     }
     titleCaseWord(word) {
