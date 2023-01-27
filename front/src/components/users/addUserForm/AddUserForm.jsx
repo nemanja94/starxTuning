@@ -26,6 +26,10 @@ const AddUserForm = () => {
       const resp = await res.json();
       console.log(resp.message);
       setMesasge(() => resp.message);
+      const timer = setTimeout(() => {
+        setMesasge("");
+      }, 3000);
+      return () => clearTimeout(timer);
     } catch (error) {
       console.log("error");
       throw error;
