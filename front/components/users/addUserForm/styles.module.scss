@@ -1,0 +1,64 @@
+.formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 350px;
+    width: 90%;
+    border: .1rem solid tomato;
+    padding: 1rem;
+    border-radius: .5rem;
+
+    .message {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: .1rem;
+        padding: .5rem;
+        background-color: tomato;
+        border-radius: .5rem;
+
+        p {
+            color: whitesmoke;
+            width: 90%;
+            text-align: justify;
+        }
+    }
+
+    .formControl {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: .3rem;
+        width: 90%;
+
+        label {
+            align-self: flex-start;
+        }
+
+        input {
+            width: 100%;
+            padding: .5rem;
+            border-radius: .5rem;
+            border: none;
+        }
+
+        .submitBtn {
+            width: 100%;
+            margin-top: 1.5rem;
+            background-color: tomato;
+            border: none;
+            padding: .5rem;
+            border-radius: .4rem;
+            color: whitesmoke;
+        }
+
+        .submitBtn:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+    }
+}
