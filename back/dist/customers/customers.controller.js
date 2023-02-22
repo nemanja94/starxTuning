@@ -24,11 +24,13 @@ let CustomersController = class CustomersController {
         this.customersService = customersService;
     }
     create(createCustomerDto) {
-        console.log(createCustomerDto);
         return this.customersService.create(createCustomerDto);
     }
     findAll() {
         return this.customersService.findAll();
+    }
+    findOne(id) {
+        return this.customersService.findOneById(id);
     }
     update(id, updateCustomerDto) {
         return this.customersService.update(+id, updateCustomerDto);
@@ -46,10 +48,10 @@ __decorate([
         description: 'Customer created',
     }),
     (0, swagger_1.ApiResponse)({
-        status: 200,
+        status: 400,
         type: common_1.HttpException,
         isArray: true,
-        description: 'Error with Database',
+        description: 'Users wrong input',
     }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
@@ -73,6 +75,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CustomersController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], CustomersController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

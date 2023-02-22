@@ -32,16 +32,16 @@ let CustomersService = class CustomersService {
                 customerPhone: createCustomerDto.customerPhone,
             });
             if (user)
-                throw new common_1.HttpException('User already exist', 200);
+                return new common_1.HttpException('User already exist', common_1.HttpStatus.BAD_REQUEST);
             const result = await this.cutomerRepo.save(createCustomerDto);
             const rdto = new return_customer_dto_1.ReturnCustomerDto();
             rdto.customerName = result.customerName;
             rdto.customerSurname = result.customerSurname;
             rdto.customerPhone = result.customerPhone;
-            return { message: 'User created' };
+            return rdto;
         }
         catch (error) {
-            return new common_1.HttpException(error, 200);
+            return new common_1.HttpException('Internal server error', common_1.HttpStatus.INTERNAL_SERVER_ERROR, { cause: new Error(error) });
         }
     }
     async findAll() {
@@ -49,12 +49,17 @@ let CustomersService = class CustomersService {
             return await this.cutomerRepo.find();
         }
         catch (error) {
-            return new common_1.HttpException(error, 200);
+            return new common_1.HttpException(error, 500);
         }
     }
     async findOneById(customerId) {
         try {
-            return await this.cutomerRepo.findOne({ where: { customerId } });
+            const customer = await this.cutomerRepo.findOne({
+                where: { customerId },
+            });
+            if (!customer)
+                return new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
+            return customer;
         }
         catch (error) {
             return new common_1.HttpException(error, 200);

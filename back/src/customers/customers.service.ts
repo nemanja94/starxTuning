@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { ReturnCustomerDto } from './dto/return-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -15,7 +15,7 @@ export class CustomersService {
 
   async create(
     createCustomerDto: CreateCustomerDto,
-  ): Promise<{ message: string } | HttpException> {
+  ): Promise<ReturnCustomerDto | HttpException> {
     try {
       createCustomerDto.customerName = await this.titleCaseWord(
         createCustomerDto.customerName,
@@ -30,7 +30,8 @@ export class CustomersService {
         customerPhone: createCustomerDto.customerPhone,
       });
 
-      if (user) throw new HttpException('User already exist', 200);
+      if (user)
+        return new HttpException('User already exist', HttpStatus.BAD_REQUEST);
 
       const result: Customer = await this.cutomerRepo.save(createCustomerDto);
 
@@ -39,9 +40,13 @@ export class CustomersService {
       rdto.customerSurname = result.customerSurname;
       rdto.customerPhone = result.customerPhone;
 
-      return { message: 'User created' };
+      return rdto;
     } catch (error) {
-      return new HttpException(error, 200);
+      return new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: new Error(error) },
+      );
     }
   }
 
@@ -49,13 +54,20 @@ export class CustomersService {
     try {
       return await this.cutomerRepo.find();
     } catch (error) {
-      return new HttpException(error, 200);
+      return new HttpException(error, 500);
     }
   }
 
   async findOneById(customerId: number): Promise<Customer | HttpException> {
     try {
-      return await this.cutomerRepo.findOne({ where: { customerId } });
+      const customer: Customer = await this.cutomerRepo.findOne({
+        where: { customerId },
+      });
+
+      if (!customer)
+        return new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+
+      return customer;
     } catch (error) {
       return new HttpException(error, 200);
     }

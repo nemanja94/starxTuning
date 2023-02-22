@@ -26,14 +26,13 @@ export class CustomersController {
     description: 'Customer created',
   })
   @ApiResponse({
-    status: 200,
+    status: 400,
     type: HttpException,
     isArray: true,
-    description: 'Error with Database',
+    description: 'Users wrong input',
   })
   @Post()
   create(@Body() createCustomerDto: CreateCustomerDto) {
-    console.log(createCustomerDto);
     return this.customersService.create(createCustomerDto);
   }
 
@@ -52,10 +51,10 @@ export class CustomersController {
     return this.customersService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.customersService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.customersService.findOneById(id);
+  }
 
   @Patch(':id')
   update(

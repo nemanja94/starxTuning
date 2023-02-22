@@ -24,14 +24,13 @@ const AddUserForm = () => {
 
       //Ako postoji problem, ima message objekat, ukoliko ne postoji, vec kreira, onda vrati samo podatke ulogovanog usera
       const resp = await res.json();
-      console.log(resp.message);
+
       setMesasge(() => resp.message);
       const timer = setTimeout(() => {
         setMesasge("");
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     } catch (error) {
-      console.log("error");
       throw error;
     }
   };
